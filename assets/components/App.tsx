@@ -7,7 +7,6 @@ import useFetch from '@/assets/custom hooks/useFetch';
 import useTTS from '@/assets/custom hooks/useTTS';
 import { storage } from 'wxt/storage';
 import ButtonAppBar from '@/assets/components/ButtonAppBar';
-import TemporaryDrawer from '@/assets/components/TemporaryDrawer';
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
@@ -205,7 +204,6 @@ function App() {
     return (
         <>
             <CssBaseline />
-            <TemporaryDrawer open={isDrawerOpen} toggleDrawer={toggleDrawer} settings={settings} handleSliderChange={handleSliderChange} />
             <ButtonAppBar menuClick={() => toggleDrawer(true)} toggleColorMode={colorMode.toggleColorMode} colorMode={theme.palette.mode} />
             <Grid container margin={1} rowSpacing={2} columns={1}>
                 <Grid xs={1}>
