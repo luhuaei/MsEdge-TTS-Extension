@@ -4,7 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import SnackbarAlert from '@/assets/components/SnackbarAlert';
 import SelectAutocomplete from '@/assets/components/SelectAutocomplete';
 import useFetch from '@/assets/custom hooks/useFetch';
-import useTTS from '@/assets/custom hooks/useTTS';
+import { useChatTTS } from '@/assets/custom hooks/useTTS';
 import { storage } from 'wxt/storage';
 import ButtonAppBar from '@/assets/components/ButtonAppBar';
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
@@ -110,7 +110,7 @@ function App() {
     // Load data from server
     const [voicesLoading, voicesError, languages, countries, voices] = useFetch(voiceState);
 
-    const { audioUrl, audioLoading, audioError, generateAudio } = useTTS();
+    const { audioUrl, audioLoading, audioError, generateAudio } = useChatTTS();
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
