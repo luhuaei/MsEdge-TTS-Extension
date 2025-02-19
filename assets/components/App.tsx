@@ -4,14 +4,16 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import SnackbarAlert from '@/assets/components/SnackbarAlert';
 import SelectAutocomplete from '@/assets/components/SelectAutocomplete';
 import useFetch from '@/assets/custom hooks/useFetch';
-import { useChatTTS } from '@/assets/custom hooks/useTTS';
+import { useChatTTS, useFishSpeechTTS } from '@/assets/custom hooks/useTTS';
 import { storage } from 'wxt/storage';
 import ButtonAppBar from '@/assets/components/ButtonAppBar';
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
-const currentVoiceItem = storage.defineItem<Record<string, any>>('local:currentVoice');
+const currentVoiceItem = storage.defineItem<Record<string, any>>('local:currentVoice', {
+  defaultValue: { language: "FishSpeech", country: 'China', voice: 'Audio1' }
+});
 const currentSettingsItem = storage.defineItem<Record<string, any>>('local:currentSettings');
 const textItem = storage.defineItem<string>('session:text');
 const colorModeItem = storage.defineItem<'light' | 'dark'>('local:colorMode', { defaultValue: 'light' });
@@ -110,7 +112,7 @@ function App() {
     // Load data from server
     const [voicesLoading, voicesError, languages, countries, voices] = useFetch(voiceState);
 
-    const { audioUrl, audioLoading, audioError, generateAudio } = useChatTTS();
+    const { audioUrl, audioLoading, audioError, generateAudio } = useFishSpeechTTS();
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -213,9 +215,6 @@ function App() {
                     <SelectAutocomplete options={countries} label="Country" value={voiceState.country} onChange={(e: any, value: string) => handleChange(value, 'select_country')} isDisabled={!voiceState.language.length} />
                 </Grid>
                 <Grid xs={1}>
-                    <SelectAutocomplete options={Object.keys(voices)} label="Voice" value={voiceState.voice && voiceState.voice.name} onChange={(e: any, value: string) => handleChange(voices[value], 'select_voice')} isDisabled={!voiceState.country.length} />
-                </Grid>
-                <Grid xs={1}>
                     <TextField
                         value={text}
                         onChange={handleTextChange}
@@ -231,7 +230,7 @@ function App() {
                     <Button
                         variant='contained'
                         sx={{ padding: '.75rem' }}
-                        disabled={audioLoading || !voiceState.voice || !text.trim().length}
+                        disabled={audioLoading || !text.trim().length}
                         fullWidth
                         onClick={handleSubmit}
                     >
